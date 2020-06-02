@@ -26,7 +26,8 @@ public class MessageReceiver {
 
         final AmazonSQS sqs = AmazonSQSClientBuilder.defaultClient();
         for (int i = 0; i < 10_000; i++) {
-            ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(queueUrl).withMessageAttributeNames("elastic-apm-traceparent", "traceparent");
+            // retrieve message body and headers (we need "elastic-apm-traceparent" & "traceparent")
+            ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(queueUrl).withMessageAttributeNames("All");
             List<Message> messages = sqs.receiveMessage(receiveMessageRequest).getMessages();
 
             // delete messages from the queue
