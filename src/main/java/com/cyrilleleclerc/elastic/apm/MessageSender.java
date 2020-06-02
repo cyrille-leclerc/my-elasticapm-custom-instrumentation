@@ -40,7 +40,7 @@ public class MessageSender {
                         startSpan("external", "sqs", null).
                         setName("send" + " " + queueName);
 
-                try (final Scope scopeSpan = transaction.activate()) {
+                try (final Scope scopeSpan = span.activate()) {
                     span.injectTraceHeaders((headerName, headerValue) -> sendMessageRequest.addMessageAttributesEntry(headerName, new MessageAttributeValue().withDataType("String").withStringValue(headerValue)));
 
                     SqsUtils.dumpMessage(sendMessageRequest);
