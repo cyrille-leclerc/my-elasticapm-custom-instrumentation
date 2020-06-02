@@ -1,6 +1,7 @@
 package com.cyrilleleclerc.elastic.apm;
 
 import co.elastic.apm.api.ElasticApm;
+import co.elastic.apm.api.HeaderExtractor;
 import co.elastic.apm.api.Scope;
 import co.elastic.apm.api.Transaction;
 import co.elastic.apm.attach.ElasticApmAttacher;
@@ -32,10 +33,7 @@ public class MessageReceiver {
             for (final Message message : messages) {
                 SqsUtils.dumpMessage(message);
 
-                Transaction transaction = ElasticApm.startTransactionWithRemoteParent(headerName -> {
-                    MessageAttributeValue messageAttributeValue = message.getMessageAttributes().get(headerName);
-                    return messageAttributeValue == null ? null : messageAttributeValue.getStringValue();
-                });
+                Transaction transaction = ElasticApm.startTransactionWithRemoteParent(new AmazonSqsMessageHeaderExtractor(message));
                 try (final Scope scopeTx = transaction.activate()) {
                     transaction.setName("MessageReceiver#ProcessMessage");
                     transaction.setType(Transaction.TYPE_REQUEST);
@@ -50,6 +48,23 @@ public class MessageReceiver {
                     transaction.end();
                 }
             }
+        }
+    }
+
+    /**
+     * Extract headers from Amazon SQS messages.
+     */
+    private static class AmazonSqsMessageHeaderExtractor implements HeaderExtractor {
+        private final Message message;
+
+        public AmazonSqsMessageHeaderExtractor(Message message) {
+            this.message = message;
+        }
+
+        @Override
+        public String getFirstHeader(String headerName) {
+            MessageAttributeValue messageAttributeValue = message.getMessageAttributes().get(headerName);
+            return messageAttributeValue == null ? null : messageAttributeValue.getStringValue();
         }
     }
 }

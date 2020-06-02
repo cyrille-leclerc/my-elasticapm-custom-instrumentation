@@ -36,7 +36,7 @@ public class MessageSender {
                         .withDelaySeconds(5);
 
                 //
-                Span span = ElasticApm.currentSpan().
+                Span span = transaction.
                         startSpan("external", "sqs", null).
                         setName("send" + " " + queueName);
 
