@@ -23,7 +23,6 @@ public class MessageReceiver {
 
         ElasticApmAttacher.attach(new ElasticConfiguration().getElasticApmConfiguration("message-receiver"));
 
-
         final AmazonSQS sqs = AmazonSQSClientBuilder.defaultClient();
         for (int i = 0; i < 10_000; i++) {
             ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(queueUrl).withMessageAttributeNames("elastic-apm-traceparent", "traceparent");
@@ -51,8 +50,6 @@ public class MessageReceiver {
                     transaction.end();
                 }
             }
-
-            Thread.sleep(1_000);
         }
     }
 }

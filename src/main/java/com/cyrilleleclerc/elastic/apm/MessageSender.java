@@ -1,6 +1,9 @@
 package com.cyrilleleclerc.elastic.apm;
 
-import co.elastic.apm.api.*;
+import co.elastic.apm.api.ElasticApm;
+import co.elastic.apm.api.Scope;
+import co.elastic.apm.api.Span;
+import co.elastic.apm.api.Transaction;
 import co.elastic.apm.attach.ElasticApmAttacher;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
@@ -8,7 +11,6 @@ import com.amazonaws.services.sqs.model.MessageAttributeValue;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
 
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class MessageSender {
 
