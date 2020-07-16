@@ -2,6 +2,10 @@
 
 # Sample architecture
 
+TODO
+
+# Distributed Trace
+
 ![](https://github.com/cyrille-leclerc/my-elasticapm-custom-instrumentation/raw/opentracing-elastic/docs/images/elastic-apm-open-tracing-custom-transaction-sqs.png)
 
 # References
