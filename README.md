@@ -2,7 +2,7 @@
 
 # Sample architecture
 
-![](https://raw.githubusercontent.com/cyrille-leclerc/my-elasticapm-custom-instrumentation/master/docs/images/elastic-apm-custom-transaction-sqs.png)
+![](https://github.com/cyrille-leclerc/my-elasticapm-custom-instrumentation/raw/opentracing-elastic/docs/images/elastic-apm-open-tracing-custom-transaction-sqs.png)
 
 # References
 
