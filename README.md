@@ -6,7 +6,10 @@ TODO
 
 # Distributed Trace
 
+* [OpenTracing Transaction JSON](docs/elastic-apm-open-tracing-amazon-sqs-distributed-trace.json)
+
 ![](https://github.com/cyrille-leclerc/my-elasticapm-custom-instrumentation/raw/opentracing-elastic/docs/images/elastic-apm-open-tracing-custom-transaction-sqs.png)
+
 
 # References
 
