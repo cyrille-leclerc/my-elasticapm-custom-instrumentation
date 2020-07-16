@@ -1,18 +1,23 @@
 package com.cyrilleleclerc.elastic.apm;
 
-import co.elastic.apm.api.ElasticApm;
-import co.elastic.apm.api.HeaderExtractor;
-import co.elastic.apm.api.Scope;
+
 import co.elastic.apm.api.Transaction;
 import co.elastic.apm.attach.ElasticApmAttacher;
+import co.elastic.apm.opentracing.ElasticApmTracer;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.MessageAttributeValue;
 import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
+import io.opentracing.Scope;
+import io.opentracing.Span;
+import io.opentracing.SpanContext;
+import io.opentracing.Tracer;
+import io.opentracing.propagation.Format;
+import io.opentracing.propagation.TextMap;
+import io.opentracing.tag.Tags;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class MessageReceiver {
 
@@ -24,6 +29,8 @@ public class MessageReceiver {
 
         ElasticApmAttacher.attach(new ElasticConfiguration().getElasticApmConfiguration("message-receiver"));
 
+        Tracer tracer = new ElasticApmTracer();
+
         final AmazonSQS sqs = AmazonSQSClientBuilder.defaultClient();
         for (int i = 0; i < 10_000; i++) {
             // retrieve message body and headers (we need "elastic-apm-traceparent", "traceparent" and "tracestate" at least)
@@ -34,19 +41,22 @@ public class MessageReceiver {
             for (final Message message : messages) {
                 SqsUtils.dumpMessage(message);
 
-                Transaction transaction = ElasticApm.startTransactionWithRemoteParent(new AmazonSqsMessageHeaderExtractor(message));
-                try (final Scope scopeTx = transaction.activate()) {
-                    transaction.setName("MessageReceiver#ProcessMessage");
-                    transaction.setType(Transaction.TYPE_REQUEST);
+                SpanContext parentSpanContext = tracer.extract(Format.Builtin.TEXT_MAP, new AmazonSqsMessageExtractAdapter(message));
+                if (parentSpanContext == null) {
+                    System.out.println("WARNING no parent context found");
+                }
+                Span span = tracer.buildSpan("MessageReceiver#ProcessMessage").asChildOf(parentSpanContext).start();
+                try (Scope scope = tracer.scopeManager().activate(span)) {
+
                     // do your thing...
 
                     sqs.deleteMessage(queueUrl, message.getReceiptHandle());
                     StressTestUtils.incrementProgressBarSuccess();
                 } catch (Exception e) {
-                    transaction.captureException(e);
+                    Tags.ERROR.set(span, true);
                     throw e;
                 } finally {
-                    transaction.end();
+                    span.finish();
                 }
             }
         }
@@ -55,17 +65,27 @@ public class MessageReceiver {
     /**
      * Extract headers from Amazon SQS messages.
      */
-    private static class AmazonSqsMessageHeaderExtractor implements HeaderExtractor {
-        private final Message message;
+    public static class AmazonSqsMessageExtractAdapter implements TextMap {
 
-        public AmazonSqsMessageHeaderExtractor(Message message) {
+        final Message message;
+
+        AmazonSqsMessageExtractAdapter(Message message) {
             this.message = message;
         }
 
         @Override
-        public String getFirstHeader(String headerName) {
-            MessageAttributeValue messageAttributeValue = message.getMessageAttributes().get(headerName);
-            return messageAttributeValue == null ? null : messageAttributeValue.getStringValue();
+        public Iterator<Map.Entry<String, String>> iterator() {
+            Map<String, String> result = new HashMap<>();
+            for (Map.Entry<String, MessageAttributeValue> entry: message.getMessageAttributes().entrySet()) {
+                result.put(entry.getKey(), entry.getValue().getStringValue());
+            }
+
+            return result.entrySet().iterator();
+        }
+
+        @Override
+        public void put(String key, String value) {
+            throw new UnsupportedOperationException("carrier is read-only");
         }
     }
 }

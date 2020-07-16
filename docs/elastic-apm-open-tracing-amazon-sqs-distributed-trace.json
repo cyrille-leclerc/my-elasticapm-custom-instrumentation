@@ -1,0 +1,125 @@
+{
+  "_index": "apm-7.8.0-transaction-000001",
+  "_type": "_doc",
+  "_id": "P8gqV3MBzLmkP38pXbet",
+  "_version": 1,
+  "_score": null,
+  "_source": {
+    "agent": {
+      "name": "java",
+      "ephemeral_id": "e84c3629-3e9e-4eb1-a844-fe5bd04b7824",
+      "version": "1.17.0"
+    },
+    "process": {
+      "pid": 98755,
+      "title": "/Applications/IntelliJ IDEA.app/Contents/jbr/Contents/Home/bin/java",
+      "ppid": 94825
+    },
+    "processor": {
+      "name": "transaction",
+      "event": "transaction"
+    },
+    "labels": {
+      "span_kind": "client",
+      "message_bus_destination": "https://sqs.us-east-1.amazonaws.com/124526594281/my-queue"
+    },
+    "observer": {
+      "hostname": "cyrille-laptop",
+      "id": "c6806dda-7615-4d01-bc3f-aeb7ca9aa2f2",
+      "ephemeral_id": "f3af8ef5-d879-4036-95a2-53ed8bd955c1",
+      "type": "apm-server",
+      "version": "7.8.0",
+      "version_major": 7
+    },
+    "trace": {
+      "id": "31d72b1b2eaf6787474c9ff691eca1eb"
+    },
+    "@timestamp": "2020-07-16T10:27:27.948Z",
+    "ecs": {
+      "version": "1.5.0"
+    },
+    "service": {
+      "node": {
+        "name": "cyrille-laptop"
+      },
+      "environment": "dev",
+      "framework": {
+        "name": "OpenTracing"
+      },
+      "name": "message-sender",
+      "runtime": {
+        "name": "Java",
+        "version": "11.0.7"
+      },
+      "language": {
+        "name": "Java",
+        "version": "11.0.7"
+      },
+      "version": "1.0.0-SNAPSHOT"
+    },
+    "host": {
+      "hostname": "cyrille-laptop",
+      "os": {
+        "platform": "Mac OS X"
+      },
+      "ip": "127.0.0.1",
+      "name": "cyrille-laptop",
+      "architecture": "x86_64"
+    },
+    "event": {
+      "ingested": "2020-07-16T10:27:41.101214Z"
+    },
+    "transaction": {
+      "duration": {
+        "us": 2098310
+      },
+      "name": "MessageSender#send",
+      "id": "a8d5c105a24ecdb4",
+      "span_count": {
+        "dropped": 0,
+        "started": 0
+      },
+      "type": "unknown",
+      "sampled": true
+    },
+    "timestamp": {
+      "us": 1594895247948003
+    }
+  },
+  "fields": {
+    "file.created": [],
+    "process.parent.start": [],
+    "event.end": [],
+    "file.ctime": [],
+    "tls.client.not_after": [],
+    "event.ingested": [
+      "2020-07-16T10:27:41.101Z"
+    ],
+    "@timestamp": [
+      "2020-07-16T10:27:27.948Z"
+    ],
+    "file.mtime": [],
+    "event.created": [],
+    "file.accessed": [],
+    "tls.server.not_before": [],
+    "package.installed": [],
+    "tls.client.not_before": [],
+    "event.start": [],
+    "tls.server.not_after": [],
+    "process.start": []
+  },
+  "highlight": {
+    "transaction.id": [
+      "@kibana-highlighted-field@a8d5c105a24ecdb4@/kibana-highlighted-field@"
+    ],
+    "trace.id": [
+      "@kibana-highlighted-field@31d72b1b2eaf6787474c9ff691eca1eb@/kibana-highlighted-field@"
+    ],
+    "processor.event": [
+      "@kibana-highlighted-field@transaction@/kibana-highlighted-field@"
+    ]
+  },
+  "sort": [
+    1594895247948
+  ]
+}

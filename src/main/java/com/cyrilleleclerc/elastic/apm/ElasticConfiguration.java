@@ -19,6 +19,13 @@ public class ElasticConfiguration {
         configuration.put("secret_token", "my_secret_token");
         // https://www.elastic.co/guide/en/apm/agent/java/current/config-core.html#config-environment
         configuration.put("environment", "dev");
+
+
+
+        // https://www.elastic.co/guide/en/apm/agent/java/current/config-core.html#config-disable-instrumentations
+        // everything except 'opentracing'
+        configuration.put("disable_instrumentations", "annotations, apache-commons-exec, apache-httpclient, asynchttpclient, concurrent, dubbo, elasticsearch-restclient, exception-handler, executor, experimental, grails, grpc, hibernate-search, http-client, jax-rs, jax-ws, jdbc, jedis, jms, jsf, kafka, lettuce, log4j, logging, mongodb-client, mule, okhttp, process, public-api, quartz, redis, redisson, render, scheduled, servlet-api, servlet-api-async, servlet-input-stream, slf4j, spring-mvc, spring-resttemplate, spring-service-name, spring-view-render, ssl-context, urlconnection");
+
         return configuration;
     }
 }

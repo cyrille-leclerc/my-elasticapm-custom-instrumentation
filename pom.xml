@@ -24,6 +24,11 @@
             <version>${elastic-apm.version}</version>
         </dependency>
         <dependency>
+            <groupId>co.elastic.apm</groupId>
+            <artifactId>apm-opentracing</artifactId>
+            <version>${elastic-apm.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
