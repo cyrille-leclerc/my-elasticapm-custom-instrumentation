@@ -6,7 +6,9 @@ TODO
 
 # Distributed Trace
 
-* [OpenTracing Transaction JSON](docs/elastic-apm-open-tracing-amazon-sqs-distributed-trace.json)
+* [OpenTracing Transaction without `transaction.type`  JSON](docs/elastic-apm-open-tracing-amazon-sqs-distributed-trace.json)
+* [OpenTracing Transaction WITH `transaction.type`  JSON](docs/elastic-apm-open-tracing-amazon-sqs-distributed-trace.json)
+   * `co.elastic.apm.opentracing.ElasticApmTags.TYPE.set(tracer.activeSpan(), co.elastic.apm.api.Transaction.TYPE_REQUEST);`
 
 ![](https://github.com/cyrille-leclerc/my-elasticapm-custom-instrumentation/raw/opentracing-elastic/docs/images/elastic-apm-open-tracing-custom-transaction-sqs.png)
 

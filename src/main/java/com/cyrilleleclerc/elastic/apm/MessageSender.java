@@ -1,7 +1,9 @@
 package com.cyrilleleclerc.elastic.apm;
 
 
+import co.elastic.apm.api.Transaction;
 import co.elastic.apm.attach.ElasticApmAttacher;
+import co.elastic.apm.opentracing.ElasticApmTags;
 import co.elastic.apm.opentracing.ElasticApmTracer;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
@@ -42,6 +44,7 @@ public class MessageSender {
 
                 Tags.SPAN_KIND.set(tracer.activeSpan(), Tags.SPAN_KIND_CLIENT);
                 Tags.MESSAGE_BUS_DESTINATION.set(tracer.activeSpan(), queueUrl);
+                ElasticApmTags.TYPE.set(tracer.activeSpan(), Transaction.TYPE_REQUEST);
 
                 tracer.inject(span.context(), Format.Builtin.TEXT_MAP, new AmazonSqsMessageCarrier(sendMessageRequest));
 
